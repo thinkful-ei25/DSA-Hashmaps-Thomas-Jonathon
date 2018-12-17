@@ -50,7 +50,7 @@ class HashMap{
       array = this.resizeHashMap();
     }
     const key = Object.keys(data);
-    let hashPosition = this.hashString(data[key]) % this.size;
+    let hashPosition = this.hashString(String(key)) % this.size;
     while(array[hashPosition] !== Number.MIN_SAFE_INTEGER){
       hashPosition = (hashPosition + 1) % this.size;
     }
@@ -65,6 +65,27 @@ class HashMap{
       }
     }
   }
+
+  getItem(key) {
+    let hashPosition = this.hashString(key) % this.size;
+    console.log('test', this.array[hashPosition]);
+    if (this.array[hashPosition] === Number.MIN_SAFE_INTEGER) {
+      console.log('Item does not exist in array');
+      return;
+    } 
+    while (this.array[hashPosition] !== Number.MIN_SAFE_INTEGER) {
+      console.log('line 77', this.array[hashPosition]);
+      console.log('line 78', this.size);
+      let hashKey = Object.keys(this.array[hashPosition]);
+      if(hashKey == key) {
+        console.log('line 81', this.array[hashPosition]);
+        return this.array[hashPosition];
+      }
+      hashPosition = (hashPosition + 1) % this.size;
+      console.log(hashPosition);
+    }
+    console.log('Item does not exist in array');
+  }
 }
 
 const hashMap = new HashMap(10);
@@ -74,4 +95,5 @@ let array =   [{Hobbit:'Frodo'}, {Wizard:'Gandolf'}, {Human:'Aragon'},
 array.forEach(function(element) {
   hashMap.insert(element, hashMap.array);
 });
-console.log(hashMap);
+// console.log(hashMap);
+console.log('GET ITEM: ',hashMap.getItem('Hobbit'));
