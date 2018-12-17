@@ -68,23 +68,19 @@ class HashMap{
 
   getItem(key) {
     let hashPosition = this.hashString(key) % this.size;
-    console.log('test', this.array[hashPosition]);
+    let array = [];
     if (this.array[hashPosition] === Number.MIN_SAFE_INTEGER) {
-      console.log('Item does not exist in array');
-      return;
+      console.log('Element is not in the hashamp');
+      return 0;
     } 
     while (this.array[hashPosition] !== Number.MIN_SAFE_INTEGER) {
-      console.log('line 77', this.array[hashPosition]);
-      console.log('line 78', this.size);
       let hashKey = Object.keys(this.array[hashPosition]);
-      if(hashKey == key) {
-        console.log('line 81', this.array[hashPosition]);
-        return this.array[hashPosition];
+      if(String(hashKey) === key) {
+        array.push(this.array[hashPosition][hashKey]);
       }
       hashPosition = (hashPosition + 1) % this.size;
-      console.log(hashPosition);
     }
-    console.log('Item does not exist in array');
+    return array;
   }
 }
 
@@ -96,4 +92,4 @@ array.forEach(function(element) {
   hashMap.insert(element, hashMap.array);
 });
 // console.log(hashMap);
-console.log('GET ITEM: ',hashMap.getItem('Hobbit'));
+console.log('GET ITEM: ',hashMap.getItem('Maiar'));
