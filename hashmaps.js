@@ -50,7 +50,7 @@ class HashMap{
       array = this.resizeHashMap();
     }
     let key;
-    if (typeof yourVariable === 'object') {
+    if (typeof(data) === 'object') {
       key = Object.keys(data);
     } else {
       key = data;
@@ -74,7 +74,7 @@ class HashMap{
   }
 
   getItem(key) {
-    let hashPosition = this.hashString(key) % this.size;
+    let hashPosition = this.hashString(String(key)) % this.size;
     let array = [];
     if (this.array[hashPosition] === Number.MIN_SAFE_INTEGER) {
       console.log('Element is not in the hashamp');
@@ -91,14 +91,14 @@ class HashMap{
   }
 
   hasItem(key) {
-    let hashPosition = this.hashString(key) % this.size;
+    let hashPosition = this.hashString(String(key)) % this.size;
     if (this.array[hashPosition] === Number.MIN_SAFE_INTEGER) {
       return false;
     } 
     let hashKey;
     while (this.array[hashPosition] !== Number.MIN_SAFE_INTEGER && this.array[hashPosition] !== Number.MAX_SAFE_INTEGER) {
       typeof(this.array[hashPosition]) === 'object'  ? hashKey = Object.keys(this.array[hashPosition]) : hashKey = this.array[hashPosition];
-      if(String(hashKey) === key) {
+      if(String(hashKey) === String(key)) {
         return true;
       }
       hashPosition = (hashPosition + 1) % this.size;
@@ -106,7 +106,7 @@ class HashMap{
   }
 
   delete(key) {
-    let hashPosition = this.hashString(key) % this.size;
+    let hashPosition = this.hashString(String(key)) % this.size;
     if (this.array[hashPosition] === Number.MIN_SAFE_INTEGER) {
       console.log('DELETE: Item does not exist');
       return;
@@ -123,18 +123,19 @@ class HashMap{
     }
   }
 }
-
+/*
 const hashMap = new HashMap(10);
 let array =   [{Hobbit:'Frodo'}, {Wizard:'Gandolf'}, {Human:'Aragon'}, 
   {Elf: 'Legolas'}, {Maiar:'The Necromancer'}, {RingBearer: 'Gollum'}, {Hobbit:'Bilbo'}, {Maiar: 'Sauron'},
   {LadyOfLight: 'Galadriel'}, {HalfElven: 'Arwen'}, {Ent: 'Treebeard'}];
 array.forEach(function(element) {
   hashMap.insert(element, hashMap.array);
+
 });
 // console.log(hashMap);
 // console.log('GET ITEM: ',hashMap.getItem('Maiar'));
 // console.log(hashMap.print());
-
+*/
 
 
 
@@ -148,5 +149,46 @@ function palindrome(sentence) {
   return hashMap1.items > 1 ? false : true;
 }
 
+function groupAnagrams(listOfWords){
+  const hashMap = new HashMap(listOfWords.length * 2 + 1);
+  let bitMask;
+  let value;
+  let array = [[]];
+  let i = 0;
+  listOfWords.forEach(function(word){
+    value = 0;
+    for(let i = 0; i < word.length; i++){
+      bitMask = 1 << (word.charCodeAt(i) - 97);
+      value = bitMask + value;
+    }
+    let tempObject = {};
+    tempObject[value] = word.length;
+    if(hashMap.hasItem(value)){
+      console.log('test');
+      for(let i = 0; i < array.length; i++){
+        if(array[i][0] === value){
+          array[i].push(word);
+        }
+      }
+    }
+    else{
+      hashMap.insert(tempObject, hashMap.array);
+      array.push([]);
+      array[i].push(value);
+      array[i].push(word);
+      i++;
+    }
+  });
+  array.forEach(function(chain){
+    chain.shift();
+    if(chain.length === 0){
+      array.pop();
+    }
+  });
+  return array;
+}
+
 // console.log(palindrome('testing')); // false
 // console.log(palindrome('racecar')); // true
+
+groupAnagrams(['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race']);
